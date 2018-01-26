@@ -1,0 +1,44 @@
+import java.io.*;
+import java.util.*;
+import java.text.*;
+import java.math.*;
+import java.util.regex.*;
+
+public class Solution {
+
+    public static void main(String[] args) {
+       Scanner sc=new Scanner(System.in);
+        TreeMap<Integer,ArrayList<String>> sortedScore=new TreeMap<Integer,ArrayList<String>>();
+        int n = sc.nextInt();
+        
+        for(int i=0;i<n;i++){
+            
+            String name=sc.next();
+            int x=sc.nextInt();
+            int y=sc.nextInt();
+            
+            int diff=Math.abs(y-x);
+            if(sortedScore.containsKey(diff)){
+                ArrayList<String> names=(ArrayList<String>)sortedScore.get(diff);
+                names.add(name);
+            }else{
+                ArrayList<String> names=new ArrayList<String>();
+                names.add(name);
+                sortedScore.put(diff,names);
+            }
+            
+        }
+        
+        Integer maxScore=sortedScore.lastKey();
+        ArrayList<String> winner=sortedScore.get(maxScore);
+        if(winner.size()==1){
+            System.out.println(winner.get(0)+" "+maxScore);
+        }else{
+            System.out.println(winner.get(0)+" "+maxScore);
+        }
+        
+        //System.out.println(sortedScore);
+        
+        
+    }
+}

@@ -1,0 +1,132 @@
+import java.io.*;
+import java.util.*;
+import java.text.*;
+import java.math.*;
+import java.util.regex.*;
+
+public class Solution {
+
+    static int winningLotteryTicket(String[] tickets) {
+       int counter=0;
+       LinkedHashMap<String,ArrayList<String>> keys=new LinkedHashMap<String,ArrayList<String>>(); 
+        
+       for(String t:tickets){
+           StringBuilder sb=new StringBuilder();
+           
+           for(int i=0;i<=9;i++){
+               if(t.contains(String.valueOf(i))){
+                   sb.append(i);
+               }
+           }
+           String key=sb.toString();
+           
+           
+           
+           if(keys.containsKey(key)){
+               ArrayList<String> ts=keys.get(key);
+               ts.add(t);
+           }else{
+               ArrayList<String> ts=new ArrayList<String>();
+               ts.add(t);
+               keys.put(key,ts);
+           } 
+           
+       }
+        
+        Iterator it=keys.entrySet().iterator();
+        int c=0;
+        while(it.hasNext()){
+            c++;
+            Map.Entry pair=(Map.Entry)it.next();
+            
+            String key=(String)pair.getKey();
+            ArrayList<String> value=(ArrayList<String>)pair.getValue();
+            System.out.println("Key "+key);
+            ArrayList<String> next=new ArrayList<String>(keys.keySet());
+            String diff=removeSameChars("0123456789",key);
+            
+            if(diff.length()>0){
+            for(int z=c;z<next.size();z++){
+                String s=next.get(z);
+                if(!key.equals(s)){
+                    boolean has=true;
+                    for(int i=0;i<diff.length();i++){
+                        if(s.contains(Character.toString(diff.charAt(i)))){
+                            
+                        }else{
+                            has=false;
+                            break;
+                        }
+                    }
+                    if(has){
+                        counter=counter+(value.size()*keys.get(s).size());
+                    }
+                }
+            }
+            }else{
+                for(int z=c;z<next.size();z++){
+                    String s=next.get(z);
+                    if(!key.equals(s)){
+                        counter=counter+(value.size()*keys.get(s).size());
+                    }
+                }
+            }
+             
+        }
+        
+      
+        
+        
+        return counter;
+    }
+    
+    static String removeSameChars(String str, String mask_str)
+    {
+      int count[]  = getCharCountArray(mask_str);
+      int ip_ind  = 0, res_ind = 0;
+       
+      char arr[] = str.toCharArray();
+       
+      while (ip_ind != arr.length)
+      {
+        char temp = arr[ip_ind];
+        if(count[temp] == 0)
+        {
+            arr[res_ind] = arr[ip_ind];
+            res_ind ++;
+        }
+            ip_ind++;
+         
+      }    
+ 
+      str = new String(arr);
+     
+       
+      return str.substring(0, res_ind);
+       
+    }
+    
+    static final int NO_OF_CHARS = 256;
+     
+    static int[] getCharCountArray(String str)
+    {
+       int count[] = new int[NO_OF_CHARS];
+       for (int i = 0; i<str.length();  i++)
+          count[str.charAt(i)]++;
+        
+       return count;
+    }
+    
+
+    public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+        int n = in.nextInt();
+        String[] tickets = new String[n];
+        for(int tickets_i = 0; tickets_i < n; tickets_i++){
+            tickets[tickets_i] = in.next();
+        }
+        int result = winningLotteryTicket(tickets);
+        System.out.println(result);
+        in.close();
+    }
+}
